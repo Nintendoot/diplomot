@@ -1,8 +1,14 @@
 package by.nintendo.diplomot.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 public enum Role {
-    USER("USER")
-    ,ADMIN("ADMIN");
+    USER("User")
+    ,MANAGER("Manager")
+    ,ADMIN("Admin");
 
     private String iteam;
 

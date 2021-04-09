@@ -2,8 +2,6 @@ package by.nintendo.diplomot.controller;
 
 import by.nintendo.diplomot.entity.Role;
 import by.nintendo.diplomot.entity.User;
-import by.nintendo.diplomot.entity.UserSpecialization;
-import by.nintendo.diplomot.repository.UserRepository;
 import by.nintendo.diplomot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,7 +21,6 @@ import java.util.Map;
 @Controller
 @RequestMapping(path = "/")
 public class RegistrationController {
-
     @Autowired
     private UserService userService;
     @Autowired
@@ -31,7 +28,6 @@ public class RegistrationController {
 
     @GetMapping(path = "/reg")
     public ModelAndView registView(ModelAndView modelAndView) {
-        modelAndView.addObject("specialization", UserSpecialization.values());
         modelAndView.addObject("newUser", new User());
         modelAndView.setViewName("registration");
         return modelAndView;

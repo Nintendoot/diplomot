@@ -1,5 +1,6 @@
 package by.nintendo.diplomot.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,28 +16,42 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private long id;
-    @NotBlank
-    @Size(min = 4)
-    private String name;
-    @NotBlank
-    @Size(min = 6)
-    private String surname;
-    @NotBlank
-    @Size(min = 4)
-    private String login;
-    @NotBlank
-    @Size(min = 4)
-    private String password;
-    private Role role;
-    @NotNull
-    @Enumerated(value = EnumType.STRING)
-    private UserSpecialization specialization;
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinTable(name = "UserTask", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<Task> tasks;
 
+    @NotBlank
+    @Size(min=2)
+    @Column(name = "name")
+    private String name;
+
+    @NotBlank
+    @Size(min=5)
+    @Column(name = "surname")
+    private String surname;
+
+    @NotBlank
+    @Column(name = "phone")
+    private String phone;
+
+    @NotBlank
+    @Column(name = "email")
+    private String email;
+
+    @NotBlank
+    @Size(min=4)
+    @Column(name = "login")
+    private String login;
+
+    @NotBlank
+    @Size(min=4)
+    @Column(name = "password")
+    @JsonIgnore
+    private String password;
+
+    @Enumerated(value = EnumType.STRING)
+    private Role role;
 }

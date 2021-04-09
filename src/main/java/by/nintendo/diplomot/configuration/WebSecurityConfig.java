@@ -24,7 +24,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 //        http
 //                .authorizeRequests()
-//                .antMatchers("/", "/reg").permitAll();
+//                .antMatchers("/", "/reg","/h2-console/**").permitAll().and().headers().frameOptions().disable().and().csrf().ignoringAntMatchers("/h2-console/**").and().cors().disable();
+        http.headers().frameOptions().disable().and().csrf().ignoringAntMatchers("/h2-console/**");
 //                .anyRequest().authenticated()
 //                .and()
 //                .formLogin()
