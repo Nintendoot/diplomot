@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html  xmlns:th="https://www.thymeleaf.org"
+       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <title>All Project</title>
+</head>
+<body>
+<header th:insert="_head.html"></header>
+<div class="container" style="max-width: 800px;width: 1000px;margin-top: 50px">
+    <h5>All Project</h5>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <td>id</td>
+            <td>Short Name</td>
+            <td>Status</td>
+            <td>Create Time</td>
+        </tr>
+        </thead>
+        <tr th:each="us:${allProjects}">
+            <td th:text="${us.id}"></td>
+            <td th:text="${us.shortName}"></td>
+            <td th:text="${us.projectStatus}"></td>
+            <td th:text="${us.creatTime}"></td>
+            <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group" >
+                <td>
+                    <form th:action="@{/project}" method="get">
+                        <div class="col-12">
+                            <input type="hidden" name="id" th:value="${us.id}">
+                            <button type="submit" class="btn btn-secondary btn-sm">Edit</button>
+                        </div>
+                    </form>
+                </td>
+                <td>
+                    <form th:action="@{/deleteProject}" method="post">
+                        <div class="col-12">
+                            <input type="hidden" name="id" th:value="${us.id}">
+                            <button type="submit" class="btn btn-secondary btn-sm">Delete</button>
+                        </div>
+                    </form>
+                </td>
+<!--                <td>-->
+<!--                    <form th:action="@{/addUser}" method="get">-->
+<!--                        <div class="col-12">-->
+<!--                            <input type="hidden" name="id" th:value="${us.id}">-->
+<!--                            <button type="submit" class="btn btn-secondary btn-sm">Add User</button>-->
+<!--                        </div>-->
+<!--                    </form>-->
+<!--                </td>-->
+            </div>
+        </tr>
+    </table>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        crossorigin="anonymous"></script>
+</body>
+</html>

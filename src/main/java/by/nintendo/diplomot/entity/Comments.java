@@ -18,19 +18,19 @@ public class Comments {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comments_id")
     private long id;
-
-    @Column(name = "text")
-    private String text;
-
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @ManyToOne
-    @JoinColumn(name = "task_id")
-    private Task task;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+//
+//    @Column(name = "text")
+//    private String text;
+//
+//    @Column(name = "created_at")
+//    private LocalDateTime createdAt;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "task_id")
+//    private Task task;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "user_id")
+//    private User user;
 
 }

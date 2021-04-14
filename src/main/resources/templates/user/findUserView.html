@@ -7,11 +7,12 @@
     <title>Find User</title>
 </head>
 <body>
+<header th:insert="_head.html"></header>
 <div class="container" style="max-width: 800px;width: 1000px;margin-top: 50px">
         <form th:action="@{/find}" method="post">
             <h5>Find User</h5>
             <div class="col-md-12">
-                <label for="user-login-label" class="form-label">Name</label>
+                <label for="user-login-label" class="form-label">Login</label>
                 <input type="text" class="form-control" id="user-login-label" name="login">
             </div>
             <button type="submit" class="btn btn-primary">Find</button>

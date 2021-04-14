@@ -54,4 +54,10 @@ public class User {
 
     @Enumerated(value = EnumType.STRING)
     private Role role;
+    @OneToMany(cascade = CascadeType.REMOVE,fetch = FetchType.EAGER,mappedBy = "owner")
+    private List<Project> ownedProjects;
+
+//    @ManyToMany
+//    private List<Project> projects;
+
 }

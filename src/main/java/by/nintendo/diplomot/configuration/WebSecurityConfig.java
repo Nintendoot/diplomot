@@ -10,34 +10,37 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetalService userDetalService;
+
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
+//                .antMatchers("/", "/reg","/h2-console/**").permitAll().and().headers().frameOptions().disable().and().csrf().ignoringAntMatchers("/h2-console/**").and().cors().disable();
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeRequests()
-//                .antMatchers("/", "/reg","/h2-console/**").permitAll().and().headers().frameOptions().disable().and().csrf().ignoringAntMatchers("/h2-console/**").and().cors().disable();
-        http.headers().frameOptions().disable().and().csrf().ignoringAntMatchers("/h2-console/**");
-//                .anyRequest().authenticated()
-//                .and()
-//                .formLogin()
-//                .usernameParameter("login")
-//                .loginPage("/auth").
-//                defaultSuccessUrl("/home")
-//                .permitAll()
-//                .and()
-//                .logout()
-//                .logoutUrl("/myLogout")
-//                .permitAll();
+        http.headers().frameOptions().disable().and().csrf().ignoringAntMatchers("/h2-console/**").and().cors().disable();
+        http.authorizeRequests()
+                .antMatchers("/","/home", "/reg", "/h2-console/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .usernameParameter("login")
+                .loginPage("/auth").
+                defaultSuccessUrl("/home")
+                .permitAll()
+                .and()
+                .logout()
+                .logoutUrl("/myLogout").logoutSuccessUrl("/")
+                .permitAll().logoutSuccessUrl("/");
     }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetalService).passwordEncoder(bCryptPasswordEncoder());

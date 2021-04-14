@@ -1,5 +1,6 @@
 package by.nintendo.diplomot.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,29 +24,29 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "project_id")
     private long id;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User owner;
     @NotBlank
-    @Size(min = 4)
     @Column(name = "title")
     private String title;
     @NotBlank
-    @Size(min = 4,max = 6)
     @Column(name = "short_name")
     private String shortName;
     @NotBlank
-    @Size(min = 10)
     @Column(name = "description")
     private String description;
     @Column(name = "create_time")
-    private LocalDateTime creatTime;
+    private String creatTime;
     @Column(name = "end_time")
     private LocalDateTime endTime;
-    @ManyToMany
-    @JoinTable(name = "users_projects",
-            joinColumns = @JoinColumn(name = "project_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User> users;
-//    mappedBy="project_id",
-    @OneToMany(cascade=CascadeType.ALL)
-    private List<Task> tasks;
+    @Enumerated(value = EnumType.STRING)
+    private ProjectStatus projectStatus;
+
+    @ManyToMany (cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    private List<User> users;
+
+//    @OneToMany(fetch = FetchType.EAGER)
+//    private List<Task> tasks;
 
 }

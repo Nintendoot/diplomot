@@ -47,4 +47,11 @@ public class RegistrationController {
         }
         return modelAndView;
     }
+
+    @GetMapping(path = "/auth")
+    public ModelAndView authenticate(ModelAndView modelAndView) {
+        modelAndView.addObject("userSession", new User());
+        modelAndView.setViewName("authorization");
+        return modelAndView;
+    }
 }
