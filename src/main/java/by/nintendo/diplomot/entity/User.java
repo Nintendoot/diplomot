@@ -4,12 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.List;
 
 @Data
@@ -35,9 +34,12 @@ public class User {
 
     @NotBlank
     @Column(name = "phone")
+    @Pattern(regexp = "^(\\+375|80)(29|25|44|33)(\\d{3})(\\d{2})(\\d{2})$",
+            message = "{user.phoneNumber.pattern}")
     private String phone;
 
     @NotBlank
+    @Email
     @Column(name = "email")
     private String email;
 
@@ -49,15 +51,25 @@ public class User {
     @NotBlank
     @Size(min=4)
     @Column(name = "password")
-    @JsonIgnore
     private String password;
 
     @Enumerated(value = EnumType.STRING)
     private Role role;
     @OneToMany(cascade = CascadeType.REMOVE,fetch = FetchType.EAGER,mappedBy = "owner")
     private List<Project> ownedProjects;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name="project_users",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id"))
+    private List<Project> projects;
 
-//    @ManyToMany
-//    private List<Project> projects;
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

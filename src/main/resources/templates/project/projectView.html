@@ -9,7 +9,7 @@
 <body>
 <header th:insert="_head.html"></header>
 <div class="container" style="max-width: 800px;width: 1000px;margin-top: 50px">
-  <form th:action="@{/createProject}" th:method="post" th:object="${newProject}">
+  <form th:action="@{/project}" th:method="post" th:object="${newProject}">
     <div class="mb-3">
       <label for="project-title-label" class="form-label">Title</label>
       <input type="text" class="form-control" id="project-title-label" name="title" placeholder="Title">

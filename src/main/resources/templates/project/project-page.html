@@ -6,16 +6,17 @@
     <title>User page</title>
 </head>
 <body>
-<!--style="max-width: 800px;width: 1000px;margin-top: 50px"-->
+<header th:insert="_head.html"></header>
 <div class="container" style="max-width: 1200px;width: 1000px;margin-top: 50px">
-    <div class="row">
-        <div class="col-sm">
-            <form th:action="@{/updateProject}" th:method="post" th:object="${updateProject}">
-                <p class="text-center" th:text="${project.get().id}"></p>
-                <p class="text-center" th:text="${project.get().creatTime}"></p>
-                <p class="text-center" th:text="${project.get().endTime}"></p>
+    <div class="row table-bordered">
+        <div class="col-sm-8" style="border-right-color: black">
+            <form th:action="@{/project/update}" th:method="post" th:object="${updateProject}">
+                <p class="text-center" th:text="|Progect ID: ${project.get().id}|"></p>
+                <p class="text-center" th:text="|Create Time: ${project.get().creatTime}|"></p>
+<!--                <div th:if="${project.get().projectStatus.COMPLETED}">-->
+                    <p class="text-center" th:text="${project.get().endTime}"></p>
+<!--                </div>-->
                 <input type="hidden" name="creatTime" th:value="${project.get().creatTime}">
-                <!--        <input type="hidden" name="owner" th:value="${project.get().owner}">-->
                 <input type="hidden" name="id" th:value="${project.get().id}">
                 <div class="mb-3">
                     <label for="project-title-label" class="form-label">Title</label>
@@ -40,17 +41,6 @@
                     <input type="text" class="form-control" id="project-description-label" name="description"
                            th:value="${project.get().description}">
                 </div>
-                <!--        <div class="mb-3">-->
-                <!--            <label for="project-tasks-label" class="form-label">Task</label>-->
-                <!--            <input type="submit" class="form-control" id="project-tasks-label" name="tasks"-->
-                <!--                   th:placeholder="${project.get().tasks}">-->
-                <!--        </div>-->
-                <!--        <div class="mb-3">-->
-                <!--            <label for="project-users-label" class="form-label">Users</label>-->
-                <!--            <input type="submit" class="form-control" id="project-users-label" name="users"-->
-                <!--                   th:placeholder="${project.get().users}">-->
-                <!--        </div>-->
-                <!--    <input type="hidden" name="id" th:value="${project.get().id}">-->
                 <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
                     <div class="col-12">
                         <button type="submit" class="btn btn-secondary btn-sm">Update</button>
@@ -58,8 +48,8 @@
                 </div>
             </form>
         </div>
-
-        <div class="col-sm">
+        <div class="col-sm-4">
+            <p class="text-center"> USERS PROJECT</p>
             <table class="table">
                 <thead>
                 <tr>
@@ -71,23 +61,22 @@
                     <td th:text="${u.name}"></td>
                     <td th:text="${u.surname}"></td>
                     <td>
-                        <form th:action="@{/delete}" method="post">
+                        <form th:action="@{|/project/deleteUser/${project.get().id}|}" method="post">
                             <div class="col-12">
-                                <input type="hidden" name="id" th:value="${u.id}">
+                                <input type="hidden" name="login" th:value="${u.login}">
                                 <button type="submit" class="btn btn-secondary btn-sm">Delete</button>
                             </div>
                         </form>
                     </td>
                 </tr>
             </table>
-            <p class="text-center"> ADD USIR IN PROGECT</p>
-            <form th:action="@{/addUser}" method="post">
+            <p class="text-center"> ADD USER IN PROJECT</p>
+            <form th:action="@{|/project/addUser/${project.get().id}|}" method="post">
                 <div class="mb-3">
                     <label for="project-login-label" class="form-label">User Login</label>
                     <input type="text" class="form-control" id="project-login-label" name="login">
                 </div>
                 <div class="col-12">
-                    <input type="hidden" name="id" th:value="${project.get().id}">
                     <button type="submit" class="btn btn-secondary btn-sm">Add User</button>
                 </div>
             </form>

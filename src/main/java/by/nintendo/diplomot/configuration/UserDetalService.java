@@ -1,4 +1,4 @@
-package by.nintendo.diplomot.service;
+package by.nintendo.diplomot.configuration;
 
 import by.nintendo.diplomot.exception.UserWasNotFoundException;
 import by.nintendo.diplomot.entity.User;

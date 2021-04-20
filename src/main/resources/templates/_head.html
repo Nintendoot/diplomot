@@ -7,6 +7,7 @@
     <title>Navbar</title>
 </head>
 <body>
+
 <nav class="navbar navbar-expand-lg  navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="/home">Navbar</a>
@@ -19,23 +20,25 @@
                     <a class="nav-link active" href="/reg">Registration</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdownUser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle active" id="navbarDropdownUser" role="button" data-bs-toggle="dropdown" >
                         User
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownUser">
                         <li><a class="dropdown-item" href="/findAll">All Users</a></li>
                         <li><a class="dropdown-item" href="/find">Find User</a></li>
                     </ul>
                 </li>
+
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdownProject" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdownProject" role="button" data-bs-toggle="dropdown">
                        Project
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
-                        <li><a class="dropdown-item" href="/allProject">All Project</a></li>
-                        <li><a class="dropdown-item" href="/createProject">Create Project</a></li>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownProject">
+                        <li><a class="dropdown-item"  href="/project/all">All Project</a></li>
+                        <li><a class="dropdown-item" href="/project">Create Project</a></li>
                     </ul>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link active" href="/myLogout">Logout</a>
                 </li>
@@ -49,3 +52,5 @@
         crossorigin="anonymous"></script>
 </body>
 </html>
+
+

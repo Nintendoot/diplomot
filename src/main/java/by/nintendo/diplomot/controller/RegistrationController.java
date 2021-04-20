@@ -2,6 +2,7 @@ package by.nintendo.diplomot.controller;
 
 import by.nintendo.diplomot.entity.Role;
 import by.nintendo.diplomot.entity.User;
+import by.nintendo.diplomot.service.SessionService;
 import by.nintendo.diplomot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,7 +25,7 @@ public class RegistrationController {
     @Autowired
     private UserService userService;
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private SessionService sessionService;
 
     @GetMapping(path = "/reg")
     public ModelAndView registView(ModelAndView modelAndView) {

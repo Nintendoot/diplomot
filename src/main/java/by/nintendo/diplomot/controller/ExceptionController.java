@@ -1,26 +1,56 @@
 package by.nintendo.diplomot.controller;
 
-import by.nintendo.diplomot.exception.ProjectNotFountException;
-import by.nintendo.diplomot.exception.UserWasNotFoundException;
+import by.nintendo.diplomot.exception.*;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+
 @Slf4j
 @ControllerAdvice
-public class ExceptionController {
+public class ExceptionController  {
 
-    @ExceptionHandler(UserWasNotFoundException.class)
-    public String userNotFound(UserWasNotFoundException e, Model model) {
-       // log.error("error",e.fillInStackTrace());
-        model.addAttribute("errorMessage",e);
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public String userAlreadyExists(RuntimeException ex, Model model) {
+        log.error("UserAlreadyExistsException " + ex.getMessage());
+        model.addAttribute("error", ex.getMessage());
         return "errorPage";
     }
 
     @ExceptionHandler(ProjectNotFountException.class)
-    public String projectNotFound(ProjectNotFountException e, Model model) {
-        // log.error("error",e.fillInStackTrace());
-        model.addAttribute("errorMessage",e);
+    public String projectNotFount(RuntimeException ex, Model model) {
+        log.error("ProjectNotFountException " + ex.getMessage());
+        model.addAttribute("error", ex.getMessage());
+        return "errorPage";
+    }
+
+    @ExceptionHandler(NotEnoughRightsException.class)
+    public String notEnoughRights(RuntimeException ex, Model model) {
+        log.error("NotEnoughRightsException " + ex.getMessage());
+        model.addAttribute("error", ex.getMessage());
+        return "errorPage";
+    }
+
+    @ExceptionHandler(UserWasNotFoundException.class)
+    public String userWasNotFound(RuntimeException ex, Model model) {
+        log.error("UserWasNotFoundException " + ex.getMessage());
+        model.addAttribute("error", ex.getMessage());
+        return "errorPage";
+    }
+    @ExceptionHandler(ActionNotPossibleException.class)
+    public String actionNotPossible(RuntimeException ex, Model model) {
+        log.error("ActionNotPossibleException " + ex.getMessage());
+        model.addAttribute("error", ex.getMessage());
         return "errorPage";
     }
 }
+
+

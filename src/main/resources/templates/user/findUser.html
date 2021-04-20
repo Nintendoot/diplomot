@@ -29,9 +29,8 @@
             <td th:text="${userFound.email}" ></td>
             <td th:text="${userFound.role}" ></td>
                 <td>
-                    <form th:action="@{/user}" method="get">
+                    <form th:action="@{'/user/'+${userFound.id}}" method="get">
                         <div class="col-sm-6">
-                            <input type="hidden" name="id" th:value="${userFound.id}">
                             <button type="submit" class="btn btn-secondary btn-sm">Edit</button>
                         </div>
                     </form>
