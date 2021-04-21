@@ -1,17 +1,17 @@
 package by.nintendo.diplomot.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = {"project"})
 @Entity
 @Table(name = "task")
 public class Task {
@@ -20,12 +20,13 @@ public class Task {
     @Column(name = "task_id")
     private long id;
 
+    @NotBlank
     @Column(name = "title")
     private String title;
 
+    @NotBlank
     @Column(name = "description")
     private String description;
-
 
     @Column(name = "dateStart")
     private String dateStart;
@@ -39,18 +40,14 @@ public class Task {
     @ManyToOne
     private Project project;
 
-    @Column(name = "priority")
     @Enumerated(EnumType.STRING)
     private Priority priority;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_tasks",
             joinColumns = @JoinColumn(name = "task_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
+            inverseJoinColumns = @JoinColumn(name = "project_id"))
     private Set<User> users;
-//    mappedBy = "task_id"
-//    @OneToMany
-//    private List<Comments> comments;
 
 
 }

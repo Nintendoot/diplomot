@@ -3,6 +3,7 @@ package by.nintendo.diplomot.service;
 import by.nintendo.diplomot.entity.*;
 import by.nintendo.diplomot.exception.ActionNotPossibleException;
 import by.nintendo.diplomot.exception.ProjectNotFountException;
+import by.nintendo.diplomot.exception.TitleAlreadyExistsException;
 import by.nintendo.diplomot.exception.UserWasNotFoundException;
 import by.nintendo.diplomot.repository.ProjectRepository;
 import by.nintendo.diplomot.repository.TaskRepository;
@@ -30,16 +31,21 @@ public class ProjectService {
 
     public void createProject(Project project) {
         log.info("Call method: createProject(project: " + project + ") ");
-        User creatorProject = sessionService.getSession();
-        if (creatorProject.getRole().equals(Role.USER)) {
-            project.setCreatTime(dateService.Time());
-            project.setProjectStatus(ProjectStatus.NOT_STARTED);
-            project.setOwner(creatorProject);
-            projectRepository.save(project);
-            log.info("project: " + project + " save. ");
-        } else {
-            throw new UserWasNotFoundException("Smena Exceptiona");
-        }
+            User creatorProject = sessionService.getSession();
+            if (creatorProject.getRole().equals(Role.USER)) {
+                if(!projectRepository.existsByOwnerAndTitle(project.getOwner(),project.getTitle())){
+                    project.setCreatTime(dateService.Time());
+                    project.setProjectStatus(ProjectStatus.NOT_STARTED);
+                    project.setOwner(creatorProject);
+                    projectRepository.save(project);
+                    log.info("project: " + project + " save. ");
+                }else{
+                    throw new TitleAlreadyExistsException("There is already a project name for this owner.");
+                }
+            } else {
+                throw new ActionNotPossibleException("Action not possible.");
+            }
+
     }
 
     public List<Project> allProjectsByManager() {
@@ -107,7 +113,7 @@ public class ProjectService {
         if (user != null) {
             Optional<Project> project = projectRepository.findByIdAndUsersContaining(id, user);
             if (project.isPresent() && !user.equals(project.get().getOwner())) {
-                project.get().getUsers().removeIf(x->x.getLogin().equals(user.getLogin()));
+                project.get().getUsers().removeIf(x -> x.getLogin().equals(user.getLogin()));
                 projectRepository.save(project.get());
                 log.info("User: " + login + "delete in project: " + project.get().getId());
             } else {
@@ -119,7 +125,7 @@ public class ProjectService {
 
     }
 
-    public Optional<Project> findProjectById(long id){
+    public Optional<Project> findProjectById(long id) {
         log.info("Call method:findProjectById(long: " + id + ") ");
         return projectRepository.findById(id);
     }

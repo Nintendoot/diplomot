@@ -45,9 +45,24 @@ public class ExceptionController  {
         model.addAttribute("error", ex.getMessage());
         return "errorPage";
     }
+
     @ExceptionHandler(ActionNotPossibleException.class)
     public String actionNotPossible(RuntimeException ex, Model model) {
         log.error("ActionNotPossibleException " + ex.getMessage());
+        model.addAttribute("error", ex.getMessage());
+        return "errorPage";
+    }
+
+    @ExceptionHandler(TaskNotFoundException.class)
+    public String taskNotFound(RuntimeException ex, Model model) {
+        log.error("TaskNotFoundException " + ex.getMessage());
+        model.addAttribute("error", ex.getMessage());
+        return "errorPage";
+    }
+
+    @ExceptionHandler(TitleAlreadyExistsException.class)
+    public String titleAlreadyExists(RuntimeException ex, Model model) {
+        log.error("TitleAlreadyExistsException " + ex.getMessage());
         model.addAttribute("error", ex.getMessage());
         return "errorPage";
     }

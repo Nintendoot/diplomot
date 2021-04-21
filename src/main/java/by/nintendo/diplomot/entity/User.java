@@ -57,6 +57,7 @@ public class User {
     private Role role;
     @OneToMany(cascade = CascadeType.REMOVE,fetch = FetchType.EAGER,mappedBy = "owner")
     private List<Project> ownedProjects;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="project_users",
             joinColumns = @JoinColumn(name = "user_id"),

@@ -12,11 +12,11 @@
     <div class="mb-3">
       <label for="task-title-label" class="form-label">Title</label>
       <input type="text" class="form-control" id="task-title-label" name="title" placeholder="Title">
-<!--        <p th:errors="*{title}" style="color: red"></p>-->
+        <p th:errors="*{title}" style="color: red"></p>
     </div>
     <div class="col-md-4">
-      <label for="task-status-label" class="form-label">Task Status</label>
-      <select id="task-status-label" class="form-select" name="status">
+      <label for="task-priority-label" class="form-label">Task Status</label>
+      <select id="task-priority-label" class="form-select" name="priority">
         <tr th:each="pr: ${priority}">
           <option th:text="${pr.getIteam()}" th:value="${pr}"></option>
         </tr>
@@ -25,7 +25,7 @@
     <div class="mb-3">
       <label for="task-description-label" class="form-label">Description</label>
       <textarea class="form-control" id="task-description-label" name="description" rows="3"></textarea>
-<!--        <p th:errors="*{description}" style="color: red"></p>-->
+        <p th:errors="*{description}" style="color: red"></p>
     </div>
 
     <div class="col-sm-6">

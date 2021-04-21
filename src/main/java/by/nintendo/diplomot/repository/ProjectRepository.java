@@ -11,7 +11,8 @@ import java.util.Optional;
 
 @Repository
 public interface ProjectRepository extends JpaRepository<Project,Long> {
-    public List<Project> findAllByOwner(User user);
-    Optional<Project> findByIdAndUsersNotContaining(long projectId, User newMember);
-    Optional<Project> findByIdAndUsersContaining(long projectId, User newMember);
+    List<Project> findAllByOwner(User user);
+    Optional<Project> findByIdAndUsersNotContaining(long projectId, User user);
+    Optional<Project> findByIdAndUsersContaining(long projectId, User user);
+    boolean existsByOwnerAndTitle(User user,String title);
 }

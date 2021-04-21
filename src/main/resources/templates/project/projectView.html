@@ -13,14 +13,17 @@
     <div class="mb-3">
       <label for="project-title-label" class="form-label">Title</label>
       <input type="text" class="form-control" id="project-title-label" name="title" placeholder="Title">
+      <p th:errors="*{title}" style="color: red"></p>
     </div>
     <div class="mb-3">
       <label for="project-shortName-label" class="form-label">Shortname</label>
       <input type="text" class="form-control" id="project-shortName-label" name="shortName" placeholder="Short Name">
+      <p th:errors="*{shortName}" style="color: red"></p>
     </div>
     <div class="mb-3">
       <label for="project-description-label" class="form-label">Description</label>
       <textarea class="form-control" id="project-description-label" name="description" rows="3"></textarea>
+      <p th:errors="*{description}" style="color: red"></p>
     </div>
 
     <div class="col-sm-6">

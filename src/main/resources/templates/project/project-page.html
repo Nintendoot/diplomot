@@ -22,11 +22,13 @@
                     <label for="project-title-label" class="form-label">Title</label>
                     <input type="text" class="form-control" id="project-title-label" name="title"
                            th:value="${project.get().title}">
+                    <p th:errors="*{title}" style="color: red"></p>
                 </div>
                 <div class="mb-3">
                     <label for="project-shortName-label" class="form-label">Shortname</label>
                     <input type="text" class="form-control" id="project-shortName-label" name="shortName"
                            th:value="${project.get().shortName}">
+                    <p th:errors="*{shortName}" style="color: red"></p>
                 </div>
                 <div class="col-md-4">
                     <label for="user-role-label" class="form-label">Role</label>
@@ -40,6 +42,7 @@
                     <label for="project-description-label" class="form-label">Description</label>
                     <input type="text" class="form-control" id="project-description-label" name="description"
                            th:value="${project.get().description}">
+                    <p th:errors="*{description}" style="color: red"></p>
                 </div>
                 <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
                     <div class="col-12">

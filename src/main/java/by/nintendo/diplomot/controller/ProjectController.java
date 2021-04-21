@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
 @Slf4j
 @Controller
 @RequestMapping(path = "/project")
@@ -31,7 +32,7 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
     @Autowired
-    private TaskService taskService;
+    private TaskRepository taskRepository;
     @Autowired
     private SessionService sessionService;
 
@@ -44,10 +45,20 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ModelAndView createProject(@ModelAttribute("newProject") Project project, ModelAndView modelAndView) {
+    public ModelAndView createProject(@Valid @ModelAttribute("newProject") Project project,
+                                      BindingResult result, ModelAndView modelAndView) {
         log.info("POST request /project");
-        projectService.createProject(project);
-        modelAndView.setViewName("index");
+        if (result.hasErrors()) {
+            Map<String, String> errorMap = new HashMap<>();
+            for (FieldError fieldError : result.getFieldErrors()) {
+                errorMap.put(fieldError.getField(), fieldError.getDefaultMessage());
+            }
+            modelAndView.addObject("project", project);
+            modelAndView.setViewName("project/projectView");
+        } else {
+            projectService.createProject(project);
+            modelAndView.setViewName("redirect:/project/all");
+        }
         return modelAndView;
     }
 
@@ -55,14 +66,14 @@ public class ProjectController {
     public ModelAndView allProject(ModelAndView modelAndView) {
         log.info("GET request /project/all");
         modelAndView.addObject("allProjects", projectService.allProjectsByManager());
-        modelAndView.addObject("all",projectService.allProjects());
+        modelAndView.addObject("all", projectService.allProjects());
         modelAndView.setViewName("project/allProject");
         return modelAndView;
     }
 
     @GetMapping(path = "/view/{id}")
     public ModelAndView projectView(@PathVariable("id") long id, ModelAndView modelAndView) {
-        log.info("GET request /project/view/"+id);
+        log.info("GET request /project/view/" + id);
         Optional<Project> project = projectService.projectById(id);
         modelAndView.addObject("updateProject", new Project());
         modelAndView.addObject("project", project);
@@ -73,16 +84,16 @@ public class ProjectController {
 
     @PostMapping(path = "/delete/{id}")
     public ModelAndView deleateProject(@PathVariable("id") long id, ModelAndView modelAndView) {
-        log.info("POST request /project/delete/"+id);
+        log.info("POST request /project/delete/" + id);
         projectService.deleteProject(id);
         modelAndView.setViewName("redirect:/project/all");
         return modelAndView;
     }
 
     @PostMapping(path = "/update")
-    public ModelAndView updateProject(@ModelAttribute("updateProject") Project project,ModelAndView modelAndView) {
+    public ModelAndView updateProject(@ModelAttribute("updateProject") Project project,
+                                       ModelAndView modelAndView) {
         log.info("POST request /project/update");
-        long id = project.getId();
         modelAndView.setViewName("redirect:/project/all");
         projectService.updateProject(project);
         return modelAndView;
@@ -90,41 +101,26 @@ public class ProjectController {
 
     @PostMapping(path = "/addUser/{id}")
     public ModelAndView addUserInProject(@PathVariable("id") long id, String login, ModelAndView modelAndView) {
-        log.info("POST request /project/addUser/"+id);
+        log.info("POST request /project/addUser/" + id);
         projectService.addUserForProject(id, login);
-        modelAndView.setViewName("redirect:/project/view/"+id);
+        modelAndView.setViewName("redirect:/project/view/" + id);
         return modelAndView;
     }
 
     @PostMapping(path = "/deleteUser/{id}")
     public ModelAndView deleteUserInProject(@PathVariable("id") long id, String login, ModelAndView modelAndView) {
-        log.info("POST request /project/deleteUser/"+id);
-        projectService.deleteUserByProject(id,login);
-        modelAndView.setViewName("redirect:/project/view/"+id);
+        log.info("POST request /project/deleteUser/" + id);
+        projectService.deleteUserByProject(id, login);
+        modelAndView.setViewName("redirect:/project/view/" + id);
         return modelAndView;
     }
 
     @GetMapping(path = "{id}/allTask")
-    public ModelAndView allTasks(@PathVariable("id") long id,ModelAndView modelAndView){
-        log.info("GET request /project/task/"+id);
-        modelAndView.addObject("idProject",id);
-        modelAndView.addObject("allTask",projectService.findProjectById(id).get().getTasks());
+    public ModelAndView allTasks(@PathVariable("id") long id, ModelAndView modelAndView) {
+        log.info("GET request /project/task/" + id);
+        modelAndView.addObject("project", id);
+        modelAndView.addObject("allTask", taskRepository.findAllByProjectId(id));
         modelAndView.setViewName("task/allTask");
         return modelAndView;
     }
-
-//    @PostMapping(path = "/{id}/task")
-//    public ModelAndView createTaskByProject(@Valid @ModelAttribute("newTask") Task task, BindingResult result,@PathVariable("id") long id, ModelAndView modelAndView) {
-//        log.info("POST request /task");
-//        if (result.hasErrors()) {
-//            Map<String, String> errorMap = new HashMap<>();
-//            for (FieldError fieldError : result.getFieldErrors()) {
-//                errorMap.put(fieldError.getField(), fieldError.getDefaultMessage());
-//            }
-//            modelAndView.setViewName("task/taskView");
-//        }
-//        taskService.createTask(task,id);
-//        modelAndView.setViewName("index");
-//        return modelAndView;
-//    }
 }

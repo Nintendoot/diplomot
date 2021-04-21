@@ -1,6 +1,5 @@
 INSERT INTO user (user_id, email, login, name, password, phone, role, surname)
-values
-       (null, null, 'admin', null, '$2y$12$Mnq.GK.kwlPkPt9HZW9KI.HKQWOnSyVgweioWQR45nrMGIaq8YObm', null, 'ADMIN', null),
+values (null, null, 'admin', null, '$2y$12$Mnq.GK.kwlPkPt9HZW9KI.HKQWOnSyVgweioWQR45nrMGIaq8YObm', null, 'ADMIN', null),
        (null, 'onliner@gmail.com', 'nintendo233', 'Oleg',
         '$2y$12$rKBORZNjgrMRqwEvf2LBB.Bs2hooPbYUA3NJB6ef6LQZEXyEwmsfq', '+375293542346', 'USER', 'Tereshkov'),
        (null, 'zevs@gmail.com', 'anna', 'Anna', '$2y$12$42SzxackWGwf6gtuhHm3a.L2C7xxaESroyDdj7MI8udDY.Jc1jXbW',
@@ -18,10 +17,11 @@ values (null, '2021-04-16 13:45:43', 'Project 1', null, 2, 'NOT_STARTED', 'ProjD
 
 
 INSERT INTO project_users(user_id, project_id)
-values
-
-
-       (2, 4);
+values (2, 4),
+       (3, 1),
+       (3, 2),
+       (3, 3),
+       (3, 5);
 
 
 

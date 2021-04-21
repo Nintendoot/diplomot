@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang=="en">
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <title>User page</title>
+</head>
+<body>
+<header th:insert="_head.html"></header>
+<div class="container" style="max-width: 1200px;width: 1000px;margin-top: 50px">
+      <form th:action="@{|/project/${idProject}/editTask|}" th:method="post" th:object="${updateTask}">
+        <p class="text-center" th:text="|Task ID: ${task.get().id}|"></p>
+        <p class="text-center" th:text="|Create Time: ${task.get().dateStart}|"></p>
+        <!--                <div th:if="${project.get().projectStatus.COMPLETED}">-->
+        <p class="text-center" th:text="${task.get().dateEnd}"></p>
+        <!--                </div>-->
+<!--        <input type="hidden" name="dateStart" th:value="${task.get().dateStart}">-->
+<!--        <input type="hidden" name="id" th:value="${project.get().id}">-->
+        <div class="mb-3">
+          <label for="task-title-label" class="form-label">Title</label>
+          <input type="text" class="form-control" id="task-title-label" name="title"
+                 th:value="${task.get().title}">
+          <p th:errors="*{title}" style="color: red"></p>
+        </div>
+        <div class="col-md-4">
+          <label for="task-priority-label" class="form-label">Priority</label>
+          <select id="task-priority-label" class="form-select" name="priority">
+            <tr th:each="pr: ${priority}">
+              <option th:text="${pr.getIteam()}" th:value="${pr}"></option>
+            </tr>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="task-status-label" class="form-label">Task Status</label>
+          <select id="task-status-label" class="form-select" name="status">
+            <tr th:each="st: ${status}">
+              <option th:text="${st.getIteam()}" th:value="${st}"></option>
+            </tr>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="task-description-label" class="form-label">Description</label>
+          <input type="text" class="form-control" id="task-description-label" name="description"
+                 th:value="${task.get().description}">
+          <p th:errors="*{description}" style="color: red"></p>
+        </div>
+        <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+          <div class="col-12">
+            <button type="submit" class="btn btn-secondary btn-sm">Update</button>
+          </div>
+        </div>
+      </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        crossorigin="anonymous"></script>
+</body>
+</html>
