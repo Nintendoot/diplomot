@@ -23,7 +23,7 @@ public class Comments {
 //    private String text;
 //
 //    @Column(name = "created_at")
-//    private LocalDateTime createdAt;
+//    private String createdAt;
 //
 //    @ManyToOne
 //    @JoinColumn(name = "task_id")

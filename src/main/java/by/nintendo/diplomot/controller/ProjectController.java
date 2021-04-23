@@ -76,7 +76,7 @@ public class ProjectController {
         log.info("GET request /project/view/" + id);
         Optional<Project> project = projectService.projectById(id);
         modelAndView.addObject("updateProject", new Project());
-        modelAndView.addObject("project", project);
+        modelAndView.addObject("project", project.get());
         modelAndView.addObject("projectStatus", ProjectStatus.values());
         modelAndView.setViewName("project/project-page");
         return modelAndView;
@@ -90,12 +90,15 @@ public class ProjectController {
         return modelAndView;
     }
 
-    @PostMapping(path = "/update")
+    @PostMapping(path = "/{id}/update")
     public ModelAndView updateProject(@ModelAttribute("updateProject") Project project,
+                                       @PathVariable("id") long id,
                                        ModelAndView modelAndView) {
         log.info("POST request /project/update");
+       User user =sessionService.getSession();
+        project.setId(id);
+        projectService.updateProject(project,user,id);
         modelAndView.setViewName("redirect:/project/all");
-        projectService.updateProject(project);
         return modelAndView;
     }
 
@@ -117,7 +120,7 @@ public class ProjectController {
 
     @GetMapping(path = "{id}/allTask")
     public ModelAndView allTasks(@PathVariable("id") long id, ModelAndView modelAndView) {
-        log.info("GET request /project/task/" + id);
+        log.info("GET request /project/"+ id +"/allTask/");
         modelAndView.addObject("project", id);
         modelAndView.addObject("allTask", taskRepository.findAllByProjectId(id));
         modelAndView.setViewName("task/allTask");

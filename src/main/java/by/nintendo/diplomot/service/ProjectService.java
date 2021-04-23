@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -31,33 +32,34 @@ public class ProjectService {
 
     public void createProject(Project project) {
         log.info("Call method: createProject(project: " + project + ") ");
-            User creatorProject = sessionService.getSession();
-            if (creatorProject.getRole().equals(Role.USER)) {
-                if(!projectRepository.existsByOwnerAndTitle(project.getOwner(),project.getTitle())){
-                    project.setCreatTime(dateService.Time());
-                    project.setProjectStatus(ProjectStatus.NOT_STARTED);
-                    project.setOwner(creatorProject);
-                    projectRepository.save(project);
-                    log.info("project: " + project + " save. ");
-                }else{
-                    throw new TitleAlreadyExistsException("There is already a project name for this owner.");
-                }
+        User creatorProject = sessionService.getSession();
+        if (creatorProject.getRole().equals(Role.USER)) {
+            if (!projectRepository.existsByOwnerAndTitle(project.getOwner(), project.getTitle())) {
+                project.setCreatTime(dateService.Time());
+                project.setProjectStatus(ProjectStatus.NOT_STARTED);
+                project.setOwner(creatorProject);
+                projectRepository.save(project);
+                log.info("project: " + project + " save. ");
             } else {
-                throw new ActionNotPossibleException("Action not possible.");
+                throw new TitleAlreadyExistsException("There is already a project name for this owner.");
             }
+        } else {
+            throw new ActionNotPossibleException("Action not possible.");
+        }
 
     }
 
     public List<Project> allProjectsByManager() {
         log.info("Call method: allProjectsByManager()");
-        return projectRepository.findAllByOwner(sessionService.getSession());
+        return  projectRepository.findAllByOwner(sessionService.getSession());
     }
 
     public Optional<Project> projectById(long id) {
         log.info("Call method: projectById(long: " + id + ") ");
         if (projectRepository.existsById(id)) {
             log.info("Find project byId: " + id);
-            return projectRepository.findById(id);
+            Optional<Project> byId = projectRepository.findById(id);
+            return byId;
         } else {
             throw new ProjectNotFountException("Project not found.");
         }
@@ -65,20 +67,24 @@ public class ProjectService {
 
     public void deleteProject(long id) {
         log.info("Call method:deleteProject(long: " + id + ") ");
-        if (projectRepository.existsById(id)) {
-            projectRepository.deleteById(id);
+        Optional<Project> project = projectRepository.findById(id);
+        if (project.isPresent()) {
+            projectRepository.delete(project.get());
             log.info("Delete project byID " + id);
         } else {
             throw new ProjectNotFountException("Project not found.");
         }
     }
 
-    public void updateProject(Project project) {
+    public void updateProject(Project project, User user, long id) {
         log.info("Call method:updateProject(Project: " + project + ") ");
-        Optional<Project> projectById = projectRepository.findById(project.getId());
+        Optional<Project> projectById = projectRepository.findByIdAndOwner(id, user);
         if (projectById.isPresent()) {
-            project.setOwner(sessionService.getSession());
-            projectRepository.save(project);
+            projectById.get().setTitle(project.getTitle());
+            projectById.get().setProjectStatus(project.getProjectStatus());
+            projectById.get().setShortName(project.getShortName());
+            projectById.get().setDescription(project.getDescription());
+            projectRepository.save(projectById.get());
             log.info("Update project: " + project);
         } else {
             throw new ProjectNotFountException("Project not found.");

@@ -1,6 +1,7 @@
 package by.nintendo.diplomot.controller;
 
 import by.nintendo.diplomot.entity.*;
+import by.nintendo.diplomot.service.ProjectService;
 import by.nintendo.diplomot.service.TaskService;
 import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,8 @@ import java.util.Optional;
 public class TaskController {
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private ProjectService projectService;
 
     @GetMapping(path = "/task")
     public ModelAndView createTask(@PathVariable("idProject") long idProject, ModelAndView modelAndView) {
@@ -61,24 +64,52 @@ public class TaskController {
         return modelAndView;
     }
     @GetMapping(path = "task/{id}")
-    public ModelAndView taskView(@PathVariable("id") long id,@PathVariable("idProject") long idProject, ModelAndView modelAndView) {
+    public ModelAndView taskView(@PathVariable("id") long id,
+                                 @PathVariable("idProject") long idProject, ModelAndView modelAndView) {
         log.info("GET request /project/"+idProject+"/task/"+ id);
-        Optional<Task> task = taskService.getTaskByIdAndProjectId(id,idProject);
+        Optional<Task> task = taskService.getTaskById(id);
+        Optional<Project> project = projectService.projectById(idProject);
         modelAndView.addObject("updateTask", new Task());
-        modelAndView.addObject("task", task);
+//        modelAndView.addObject("taskUsers", task.get().getUsersTask());
+        modelAndView.addObject("task", task.get());
+        modelAndView.addObject("idPr",idProject);
+        modelAndView.addObject("projectUsers",project.get().getUsers());
+        modelAndView.addObject("idT",id);
         modelAndView.addObject("priority", Priority.values());
-        modelAndView.addObject("status", TaskStatus.values());
         modelAndView.setViewName("task/task-page");
         return modelAndView;
     }
 
-    @PostMapping(path = "/editTask")
-    public ModelAndView editTask(@ModelAttribute("updateTask") Task task,@PathVariable long idProject,
+    @PostMapping(path = "/task/{id}")
+    public ModelAndView editTask(@ModelAttribute("updateTask") Task task,
+                                 @PathVariable long idProject,
+                                 @PathVariable long id,
                                        ModelAndView modelAndView) {
         log.info("POST request /project/"+idProject+"/editTask/"+ task.getId());
+        taskService.updateTask(task,id,idProject);
         modelAndView.setViewName("redirect:/project/"+idProject+"/allTask");
-        taskService.updateTask(task);
         return modelAndView;
     }
 
+    @PostMapping(path = "/task/{idTask}/deleteUser/{idUser}")
+    public ModelAndView deleteUserByTask(@PathVariable("idProject") long idProject,
+                                 @PathVariable("idTask") long idTask,
+                                 @PathVariable("idUser") long id,
+                                 ModelAndView modelAndView) {
+        log.info("POST request /project/"+idProject+"/task/"+ idTask+"/deleteUser/"+id);
+        taskService.deleteUserByTask(id,idTask,idProject);
+        modelAndView.setViewName("redirect:/project/"+idProject+"/task/"+idTask);
+        return modelAndView;
+    }
+
+    @PostMapping(path = "/task/{idTask}/addUser")
+    public ModelAndView addUserByTask(@PathVariable("idProject") long idProject,
+                                         @PathVariable("idTask") long idTask,
+                                         String login,
+                                         ModelAndView modelAndView) {
+        log.info("POST request /project/"+idProject+"/task/"+ idTask+"/addUser");
+        taskService.addUserByTask(login,idTask,idProject);
+        modelAndView.setViewName("redirect:/project/"+idProject+"/task/"+idTask);
+        return modelAndView;
+    }
 }

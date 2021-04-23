@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -23,12 +25,12 @@ public class User {
     private long id;
 
     @NotBlank
-    @Size(min=2)
+    @Size(min = 2)
     @Column(name = "name")
     private String name;
 
     @NotBlank
-    @Size(min=5)
+    @Size(min = 5)
     @Column(name = "surname")
     private String surname;
 
@@ -44,12 +46,12 @@ public class User {
     private String email;
 
     @NotBlank
-    @Size(min=4)
+    @Size(min = 4)
     @Column(name = "login")
     private String login;
 
     @NotBlank
-    @Size(min=4)
+    @Size(min = 4)
     @Column(name = "password")
     private String password;
 
@@ -58,11 +60,15 @@ public class User {
     @OneToMany(cascade = CascadeType.REMOVE,fetch = FetchType.EAGER,mappedBy = "owner")
     private List<Project> ownedProjects;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name="project_users",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "project_id"))
     private List<Project> projects;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private List<Task> tasks;
 
     @Override
     public String toString() {

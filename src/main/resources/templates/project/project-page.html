@@ -3,46 +3,47 @@
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-    <title>User page</title>
+    <title>Project page</title>
 </head>
 <body>
 <header th:insert="_head.html"></header>
 <div class="container" style="max-width: 1200px;width: 1000px;margin-top: 50px">
     <div class="row table-bordered">
         <div class="col-sm-8" style="border-right-color: black">
-            <form th:action="@{/project/update}" th:method="post" th:object="${updateProject}">
-                <p class="text-center" th:text="|Progect ID: ${project.get().id}|"></p>
-                <p class="text-center" th:text="|Create Time: ${project.get().creatTime}|"></p>
+            <form th:action="@{|/project/${project.id}/update|}" th:method="post" th:object="${updateProject}">
+                <p class="text-center" th:text="|Progect ID: ${project.id}|"></p>
+                <p class="text-center"  th:text="|Create Time: ${project.creatTime}|"></p>
 <!--                <div th:if="${project.get().projectStatus.COMPLETED}">-->
-                    <p class="text-center" th:text="${project.get().endTime}"></p>
+<!--                    <p class="text-center" th:text="${project.get().endTime}"></p>-->
 <!--                </div>-->
-                <input type="hidden" name="creatTime" th:value="${project.get().creatTime}">
-                <input type="hidden" name="id" th:value="${project.get().id}">
+                <input type="hidden" name="creatTime" th:value="${project.creatTime}">
+<!--                <input type="hidden" name="users" th:value="${project.users}">-->
+
+
                 <div class="mb-3">
                     <label for="project-title-label" class="form-label">Title</label>
                     <input type="text" class="form-control" id="project-title-label" name="title"
-                           th:value="${project.get().title}">
-                    <p th:errors="*{title}" style="color: red"></p>
+                           th:value="${project.title}">
+<!--                    <p th:errors="*{title}" style="color: red"></p>-->
                 </div>
                 <div class="mb-3">
                     <label for="project-shortName-label" class="form-label">Shortname</label>
                     <input type="text" class="form-control" id="project-shortName-label" name="shortName"
-                           th:value="${project.get().shortName}">
-                    <p th:errors="*{shortName}" style="color: red"></p>
+                           th:value="${project.shortName}">
+<!--                    <p th:errors="*{shortName}" style="color: red"></p>-->
                 </div>
                 <div class="col-md-4">
-                    <label for="user-role-label" class="form-label">Role</label>
-                    <select id="user-role-label" class="form-select" name="projectStatus">
+                    <label for="project-projectStatus-label" class="form-label">Project Status</label>
+                    <select id="project-projectStatus-label" class="form-select" name="projectStatus">
                         <tr th:each="st: ${projectStatus}">
                             <option th:text="${st.getIteam()}" th:value="${st}"></option>
-                        </tr>
                     </select>
                 </div>
                 <div class="mb-3">
                     <label for="project-description-label" class="form-label">Description</label>
                     <input type="text" class="form-control" id="project-description-label" name="description"
-                           th:value="${project.get().description}">
-                    <p th:errors="*{description}" style="color: red"></p>
+                           th:value="${project.description}">
+<!--                    <p th:errors="*{description}" style="color: red"></p>-->
                 </div>
                 <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
                     <div class="col-12">
@@ -60,11 +61,11 @@
                     <td>Surname</td>
                 </tr>
                 </thead>
-                <tr th:each="u:${project.get().getUsers()}">
+                <tr th:each="u:${project.getUsers()}">
                     <td th:text="${u.name}"></td>
                     <td th:text="${u.surname}"></td>
                     <td>
-                        <form th:action="@{|/project/deleteUser/${project.get().id}|}" method="post">
+                        <form th:action="@{|/project/deleteUser/${project.id}|}" method="post">
                             <div class="col-12">
                                 <input type="hidden" name="login" th:value="${u.login}">
                                 <button type="submit" class="btn btn-secondary btn-sm">Delete</button>
@@ -74,7 +75,7 @@
                 </tr>
             </table>
             <p class="text-center"> ADD USER IN PROJECT</p>
-            <form th:action="@{|/project/addUser/${project.get().id}|}" method="post">
+            <form th:action="@{|/project/addUser/${project.id}|}" method="post">
                 <div class="mb-3">
                     <label for="project-login-label" class="form-label">User Login</label>
                     <input type="text" class="form-control" id="project-login-label" name="login">

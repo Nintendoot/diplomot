@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -14,17 +15,18 @@ import java.util.Set;
 @ToString(exclude = {"project"})
 @Entity
 @Table(name = "task")
-public class Task {
+public class
+Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "task_id")
     private long id;
 
-    @NotBlank
+
     @Column(name = "title")
     private String title;
 
-    @NotBlank
+
     @Column(name = "description")
     private String description;
 
@@ -35,19 +37,17 @@ public class Task {
     private String dateEnd;
 
     @Enumerated(value = EnumType.STRING)
-    private TaskStatus status;
+    private TaskStatus taskStatus;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "project_id")
     private Project project;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     private Priority priority;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_tasks",
-            joinColumns = @JoinColumn(name = "task_id"),
-            inverseJoinColumns = @JoinColumn(name = "project_id"))
-    private Set<User> users;
+    private Set<User> usersTask;
 
 
 }

@@ -2,22 +2,22 @@ package by.nintendo.diplomot.entity;
 
 public enum TaskStatus {
     NOT_STARTED("Not started")
-    ,IN_PROGRESS("In progree")
-    ,CHEKING("Cheking")
+    ,IN_PROGRESS("In progress")
+    , CHECKING("Checking")
     ,COMPLETED("Completed")
     ,POSTPONED("Postponed");
 
-    private String iteam;
+private String name;
 
-    TaskStatus(String iteam) {
-        this.iteam = iteam;
+    TaskStatus(String name) {
+        this.name = name;
     }
 
-    public String getIteam() {
-        return iteam;
+    public String getName() {
+        return name;
     }
 
-    public void setIteam(String iteam) {
-        this.iteam = iteam;
+    public void setName(String name) {
+        this.name = name;
     }
 }

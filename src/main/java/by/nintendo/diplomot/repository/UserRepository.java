@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
 @Repository
 public interface UserRepository extends JpaRepository<User,Long> {
-    public User findUserByLogin(String login);
-    public List<User> findAllByRoleIsNot(Role AdminRole);
+     User findUserByLogin(String login);
+     List<User> findAllByRoleIsNot(Role AdminRole);
+    List<User> findAllByProjects(Project project);
 }

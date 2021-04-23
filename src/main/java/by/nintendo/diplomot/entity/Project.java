@@ -11,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -24,7 +25,7 @@ public class Project {
     @Column(name = "project_id")
     private long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     private User owner;
 
     @NotBlank
@@ -48,13 +49,13 @@ public class Project {
     @Enumerated(value = EnumType.STRING)
     private ProjectStatus projectStatus;
 
-    @ManyToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST},fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="project_users",
-    joinColumns = @JoinColumn(name = "project_id"),
-    inverseJoinColumns = @JoinColumn(name = "user_id"))
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> users;
 
-    @OneToMany(mappedBy = "project",cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "project",cascade = CascadeType.ALL)
     private List<Task> tasks;
 
 
