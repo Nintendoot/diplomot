@@ -47,6 +47,9 @@ Task {
     private Priority priority;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name="users_task",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> usersTask;
 
 

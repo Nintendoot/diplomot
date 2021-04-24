@@ -67,7 +67,9 @@ public class User {
     private List<Project> projects;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @JoinTable(name="users_task",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "task_id"))
     private List<Task> tasks;
 
     @Override
