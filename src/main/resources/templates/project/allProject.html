@@ -9,6 +9,7 @@
 <body>
 <header th:insert="_head.html"></header>
 <div class="container" style="max-width: 800px;width: 1000px;margin-top: 50px" sec:authorize="hasRole('User')">
+
     <h5>All Project</h5>
 
     <table class="table">
@@ -50,7 +51,6 @@
             </div>
         </tr>
     </table>
-
 </div>
 
 <div class="container" style="max-width: 800px;width: 1000px;margin-top: 50px" sec:authorize="hasRole('Admin')">
@@ -73,8 +73,40 @@
             <td th:text="${us.creatTime}"></td>
         </tr>
     </table>
+    <form th:action="@{/home}" method="get">
+        <div class="col-12">
+            <button type="submit" class="btn btn-secondary btn-sm">Home</button>
+        </div>
+    </form>
 </div>
+
+<div class="container" style="max-width: 800px;width: 1000px;margin-top: 50px" sec:authorize="hasRole('User')">
+    <h5 class="text-center">All Project</h5>
+    <table class="table">
+        <thead>
+        <tr>
+            <td>id</td>
+            <td>Short Name</td>
+            <td>Status</td>
+            <td>Create Time</td>
+            <td>End Time</td>
+        </tr>
+        </thead>
+        <tr th:each="us:${complitedProject}">
+            <td th:text="${us.id}"></td>
+            <td th:text="${us.shortName}"></td>
+            <td th:text="${us.projectStatus}"></td>
+            <td th:text="${us.creatTime}"></td>
+            <td th:text="${us.endTime}"></td>
+        </tr>
+    </table>
+    <form th:action="@{/home}" method="get">
+        <div class="col-12">
+            <button type="submit" class="btn btn-secondary btn-sm">Home</button>
+        </div>
+    </form>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
         crossorigin="anonymous"></script>

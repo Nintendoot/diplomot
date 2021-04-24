@@ -59,7 +59,7 @@
                     <td>
                         <form th:action="@{|/project/${idPr}/task/${idT}/deleteUser/${u.id}|}" method="post">
                             <div class="col-12">
-<!--                                <input type="hidden" name="login" th:value="${u.login}">-->
+                                <!--                                <input type="hidden" name="login" th:value="${u.login}">-->
                                 <button type="submit" class="btn btn-secondary btn-sm">Delete</button>
                             </div>
                         </form>
@@ -69,9 +69,10 @@
             <p class="text-center"> ADD USER IN TASK</p>
             <form th:action="@{|/project/${idPr}/task/${idT}/addUser|}" method="post">
                 <div class="col-md-4">
-                    <select id="task-users-label" class="form-select" name="login" style="max-width: 200px;width: 200px">
+                    <select id="task-users-label" class="form-select" name="login"
+                            style="max-width: 200px;width: 200px">
                         <a th:each="us: ${projectUsers}">
-                            <option th:text="|${us.getName()} ${us.getSurname()}|" th:value="${us.login}" ></option>
+                            <option th:text="|${us.getName()} ${us.getSurname()}|" th:value="${us.login}"></option>
                         </a>
                     </select>
                 </div>
@@ -102,9 +103,24 @@
             </td>
         </tr>
     </table>
+
+    <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+        <form th:action="@{|/project/${idPr}/allTask|}" method="get">
+            <div class="col-12">
+                <button type="submit" class="btn btn-secondary btn-sm">Back</button>
+            </div>
+        </form>
+    
+        <form th:action="@{/home}" method="get">
+            <div class="col-12">
+                <button type="submit" class="btn btn-secondary btn-sm">Home</button>
+            </div>
+        </form>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
-            crossorigin="anonymous"></script>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        crossorigin="anonymous"></script>
 </body>
 </html>

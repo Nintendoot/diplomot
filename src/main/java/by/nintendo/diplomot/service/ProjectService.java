@@ -49,9 +49,19 @@ public class ProjectService {
 
     }
 
-    public List<Project> allProjectsByManager() {
+    public List<Project> allProjectsByManager(boolean i) {
         log.info("Call method: allProjectsByManager()");
-        return  projectRepository.findAllByOwner(sessionService.getSession());
+        if(i){
+            List<Project>  projects=projectRepository.findAllByOwner(sessionService.getSession());
+            return projects.stream().
+                    filter(x -> !x.getProjectStatus().equals(ProjectStatus.COMPLETED)).
+                    collect(Collectors.toList());
+        }else{
+            List<Project>  projects=projectRepository.findAllByOwner(sessionService.getSession());
+            return projects.stream().
+                    filter(x -> x.getProjectStatus().equals(ProjectStatus.COMPLETED)).
+                    collect(Collectors.toList());
+        }
     }
 
     public Optional<Project> projectById(long id) {
@@ -84,6 +94,9 @@ public class ProjectService {
             projectById.get().setProjectStatus(project.getProjectStatus());
             projectById.get().setShortName(project.getShortName());
             projectById.get().setDescription(project.getDescription());
+            if(project.getProjectStatus().equals(ProjectStatus.COMPLETED)){
+                projectById.get().setEndTime(dateService.Time());
+            }
             projectRepository.save(projectById.get());
             log.info("Update project: " + project);
         } else {
@@ -96,7 +109,7 @@ public class ProjectService {
         User userByLogin = userRepository.findUserByLogin(login);
         if (userByLogin != null) {
             Optional<Project> project = projectRepository.findByIdAndUsersNotContaining(id, userByLogin);
-            if (project.isPresent() && !userByLogin.equals(project.get().getOwner())) {
+            if (project.isPresent() && !userByLogin.getLogin().equals(project.get().getOwner().getLogin())) {
                 project.get().getUsers().add(userByLogin);
                 projectRepository.save(project.get());
                 log.info("User: " + login + "add in project: " + project.get().getId());

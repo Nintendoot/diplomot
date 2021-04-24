@@ -2,6 +2,7 @@ package by.nintendo.diplomot.controller;
 
 import by.nintendo.diplomot.entity.*;
 import by.nintendo.diplomot.service.ProjectService;
+import by.nintendo.diplomot.service.SessionService;
 import by.nintendo.diplomot.service.TaskService;
 import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,8 @@ public class TaskController {
     private TaskService taskService;
     @Autowired
     private ProjectService projectService;
+    @Autowired
+    private SessionService sessionService;
 
     @GetMapping(path = "/task")
     public ModelAndView createTask(@PathVariable("idProject") long idProject, ModelAndView modelAndView) {
@@ -75,6 +78,7 @@ public class TaskController {
         modelAndView.addObject("idPr",idProject);
         modelAndView.addObject("projectUsers",project.get().getUsers());
         modelAndView.addObject("idT",id);
+//        modelAndView.addObject("userSession",sessionService.getSession());
         modelAndView.addObject("priority", Priority.values());
         modelAndView.setViewName("task/task-page");
         return modelAndView;

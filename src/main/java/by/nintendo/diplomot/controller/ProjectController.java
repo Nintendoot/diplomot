@@ -65,7 +65,8 @@ public class ProjectController {
     @GetMapping(path = "/all")
     public ModelAndView allProject(ModelAndView modelAndView) {
         log.info("GET request /project/all");
-        modelAndView.addObject("allProjects", projectService.allProjectsByManager());
+        modelAndView.addObject("allProjects", projectService.allProjectsByManager(true));
+        modelAndView.addObject("complitedProject", projectService.allProjectsByManager(false));
         modelAndView.addObject("all", projectService.allProjects());
         modelAndView.setViewName("project/allProject");
         return modelAndView;
