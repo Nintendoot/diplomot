@@ -14,7 +14,7 @@
                   th:object="${updateTask}">
                 <p class="text-center" th:text="|Task ID: ${task.id}|"></p>
                 <p class="text-center" th:text="|Create Time: ${task.dateStart}|"></p>
-                <p class="text-center" th:text="|Status: ${task.taskStatus}|"></p>
+<!--                <p class="text-center" th:text="|Status: ${task.taskStatus}|"></p>-->
                 <!--                <div th:if="${project.get().projectStatus.COMPLETED}">-->
                 <!--        <p class="text-center" th:text="${task.get().dateEnd}"></p>-->
                 <!--                </div>-->
@@ -30,6 +30,14 @@
                     <select id="task-priority-label" class="form-select" name="priority">
                         <a th:each="pr: ${priority}">
                             <option th:text="${pr}" th:value="${pr}"></option>
+                        </a>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="task-taskStatus-label" class="form-label">Task status</label>
+                    <select id="task-taskStatus-label" class="form-select" name="taskStatus">
+                        <a th:each="tas: ${taskStatus}">
+                            <option th:text="${tas}" th:value="${tas}"></option>
                         </a>
                     </select>
                 </div>
@@ -110,7 +118,7 @@
                 <button type="submit" class="btn btn-secondary btn-sm">Back</button>
             </div>
         </form>
-    
+
         <form th:action="@{/home}" method="get">
             <div class="col-12">
                 <button type="submit" class="btn btn-secondary btn-sm">Home</button>

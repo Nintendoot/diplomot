@@ -78,7 +78,7 @@ public class TaskController {
         modelAndView.addObject("idPr",idProject);
         modelAndView.addObject("projectUsers",project.get().getUsers());
         modelAndView.addObject("idT",id);
-//        modelAndView.addObject("userSession",sessionService.getSession());
+        modelAndView.addObject("taskStatus", ProjectStatus.values());
         modelAndView.addObject("priority", Priority.values());
         modelAndView.setViewName("task/task-page");
         return modelAndView;

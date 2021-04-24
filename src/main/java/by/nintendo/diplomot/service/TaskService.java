@@ -78,6 +78,7 @@ public class TaskService {
                 ta.get().setTitle(task.getTitle());
                 ta.get().setDescription(task.getDescription());
                 ta.get().setPriority(task.getPriority());
+                ta.get().setTaskStatus(task.getTaskStatus());
                 taskRepository.save(ta.get());
                 log.info("Update task id: " + id);
             } else {

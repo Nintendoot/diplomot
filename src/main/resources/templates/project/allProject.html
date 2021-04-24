@@ -30,7 +30,7 @@
                 <td>
                     <form th:action="@{|/project/view/${us.id}|}" method="get">
                         <div class="col-12">
-                            <button type="submit" class="btn btn-secondary btn-sm">Edit</button>
+                            <button type="submit" class="btn btn-secondary btn-sm">Open</button>
                         </div>
                     </form>
                 </td>
@@ -81,7 +81,7 @@
 </div>
 
 <div class="container" style="max-width: 800px;width: 1000px;margin-top: 50px" sec:authorize="hasRole('User')">
-    <h5 class="text-center">All Project</h5>
+    <h5 class="text-center">Complite Project</h5>
     <table class="table">
         <thead>
         <tr>
