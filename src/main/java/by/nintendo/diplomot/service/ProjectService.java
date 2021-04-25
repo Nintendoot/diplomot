@@ -89,6 +89,7 @@ public class ProjectService {
     public void updateProject(Project project, User user, long id) {
         log.info("Call method:updateProject(Project: " + project + ") ");
         Optional<Project> projectById = projectRepository.findByIdAndOwner(id, user);
+
         if (projectById.isPresent()) {
             projectById.get().setTitle(project.getTitle());
             projectById.get().setProjectStatus(project.getProjectStatus());

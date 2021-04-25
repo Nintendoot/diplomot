@@ -92,14 +92,23 @@ public class ProjectController {
     }
 
     @PostMapping(path = "/{id}/update")
-    public ModelAndView updateProject(@ModelAttribute("updateProject") Project project,
-                                       @PathVariable("id") long id,
-                                       ModelAndView modelAndView) {
+    public ModelAndView updateProject(@Valid @ModelAttribute("updateProject") Project project,
+                                      BindingResult result,
+                                      @PathVariable("id") long id,
+                                      ModelAndView modelAndView) {
         log.info("POST request /project/update");
-       User user =sessionService.getSession();
-        project.setId(id);
-        projectService.updateProject(project,user,id);
-        modelAndView.setViewName("redirect:/project/all");
+        if (result.hasErrors()) {
+            Map<String, String> errorMap = new HashMap<>();
+            for (FieldError fieldError : result.getFieldErrors()) {
+                errorMap.put(fieldError.getField(), fieldError.getDefaultMessage());
+            }
+            modelAndView.setViewName("valid_form/project");
+            log.info("Valid error POST request /project/update");
+        } else {
+            User user = sessionService.getSession();
+            projectService.updateProject(project, user, id);
+            modelAndView.setViewName("redirect:/project/all");
+        }
         return modelAndView;
     }
 
@@ -121,7 +130,7 @@ public class ProjectController {
 
     @GetMapping(path = "{id}/allTask")
     public ModelAndView allTasks(@PathVariable("id") long id, ModelAndView modelAndView) {
-        log.info("GET request /project/"+ id +"/allTask/");
+        log.info("GET request /project/" + id + "/allTask/");
         modelAndView.addObject("project", id);
         modelAndView.addObject("allTask", taskRepository.findAllByProjectId(id));
         modelAndView.setViewName("task/allTask");

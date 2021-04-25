@@ -22,7 +22,7 @@ Task {
     @Column(name = "task_id")
     private long id;
 
-
+@NotBlank
     @Column(name = "title")
     private String title;
 

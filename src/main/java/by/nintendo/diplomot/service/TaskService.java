@@ -91,7 +91,6 @@ public class TaskService {
 
     public void deleteUserByTask(long idUser, long idTask, long idProject) {
         log.info("Call method:deleteUserByTask(ser id: " + idUser + " ,task id " + idTask + " ,user id " + idProject + ") ");
-
           Optional<User> user = userRepository.findById(idUser);
           if(user.isPresent()){
               Optional<Task> task = taskRepository.findByIdAndUsersTaskContaining(idTask, user.get());

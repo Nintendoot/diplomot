@@ -13,24 +13,16 @@
             <form th:action="@{|/project/${project.id}/update|}" th:method="post" th:object="${updateProject}">
                 <p class="text-center" th:text="|Progect ID: ${project.id}|"></p>
                 <p class="text-center" th:text="|Create Time: ${project.creatTime}|"></p>
-                <!--                <div th:if="${project.get().projectStatus.COMPLETED}">-->
-                <!--                    <p class="text-center" th:text="${project.get().endTime}"></p>-->
-                <!--                </div>-->
-                <input type="hidden" name="creatTime" th:value="${project.creatTime}">
-                <!--                <input type="hidden" name="users" th:value="${project.users}">-->
-
-
                 <div class="mb-3">
                     <label for="project-title-label" class="form-label">Title</label>
                     <input type="text" class="form-control" id="project-title-label" name="title"
                            th:value="${project.title}">
-                    <!--                    <p th:errors="*{title}" style="color: red"></p>-->
+                    <td th:errors="*{title}" style="color: red"></td>
                 </div>
                 <div class="mb-3">
                     <label for="project-shortName-label" class="form-label">Shortname</label>
                     <input type="text" class="form-control" id="project-shortName-label" name="shortName"
                            th:value="${project.shortName}">
-                    <!--                    <p th:errors="*{shortName}" style="color: red"></p>-->
                 </div>
                 <div class="col-md-4">
                     <label for="project-projectStatus-label" class="form-label">Project Status</label>
@@ -43,32 +35,26 @@
                     <label for="project-description-label" class="form-label">Description</label>
                     <input type="text" class="form-control" id="project-description-label" name="description"
                            th:value="${project.description}">
-                    <!--                    <p th:errors="*{description}" style="color: red"></p>-->
                 </div>
                 <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-
-                    <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-secondary btn-sm">Update</button>
+                    </div>
+                    <form th:action="@{|/project/all|}" method="get">
                         <div class="col-12">
-                            <button type="submit" class="btn btn-secondary btn-sm">Update</button>
+                            <button type="submit" class="btn btn-secondary btn-sm">Back</button>
                         </div>
-                    </div>
-                    <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-                        <form th:action="@{|/project/all|}" method="get">
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-secondary btn-sm">Back</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-                        <form th:action="@{/home}" method="get">
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-secondary btn-sm">Home</button>
-                            </div>
-                        </form>
-                    </div>
+                    </form>
+                    <form th:action="@{/home}" method="get">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-secondary btn-sm">Home</button>
+                        </div>
+                    </form>
                 </div>
 
+
             </form>
+
         </div>
         <div class="col-sm-4">
             <p class="text-center"> USERS PROJECT</p>

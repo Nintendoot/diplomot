@@ -73,7 +73,6 @@ public class TaskController {
         Optional<Task> task = taskService.getTaskById(id);
         Optional<Project> project = projectService.projectById(idProject);
         modelAndView.addObject("updateTask", new Task());
-//        modelAndView.addObject("taskUsers", task.get().getUsersTask());
         modelAndView.addObject("task", task.get());
         modelAndView.addObject("idPr",idProject);
         modelAndView.addObject("projectUsers",project.get().getUsers());
@@ -85,13 +84,24 @@ public class TaskController {
     }
 
     @PostMapping(path = "/task/{id}")
-    public ModelAndView editTask(@ModelAttribute("updateTask") Task task,
+    public ModelAndView editTask(@Valid @ModelAttribute("updateTask") Task task,
+                                 BindingResult result,
                                  @PathVariable long idProject,
                                  @PathVariable long id,
                                        ModelAndView modelAndView) {
         log.info("POST request /project/"+idProject+"/editTask/"+ task.getId());
-        taskService.updateTask(task,id,idProject);
-        modelAndView.setViewName("redirect:/project/"+idProject+"/allTask");
+        if (result.hasErrors()) {
+            Map<String, String> errorMap = new HashMap<>();
+            for (FieldError fieldError : result.getFieldErrors()) {
+                errorMap.put(fieldError.getField(), fieldError.getDefaultMessage());
+            }
+            modelAndView.addObject("projectId",idProject);
+            modelAndView.setViewName("valid_form/task");
+            log.info("Valid error POST request /project/"+idProject+"/editTask/"+ task.getId());
+        } else {
+            taskService.updateTask(task,id,idProject);
+            modelAndView.setViewName("redirect:/project/"+idProject+"/allTask");
+        }
         return modelAndView;
     }
 

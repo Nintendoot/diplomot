@@ -9,7 +9,7 @@
 <body>
 <header th:insert="_head.html"></header>
 <div class="container" style="max-width: 800px;width: 1000px;margin-top: 50px">
-    <h5>TASK</h5>
+    <h5 class="text-center">TASK</h5>
 
     <table class="table table-hover">
         <thead>
@@ -25,10 +25,8 @@
             <td th:text="${task.id}"></td>
             <td th:text="${task.title}"></td>
             <td th:text="${task.dateStart}"></td>
-            <td th:text="${task.taskStatus}"></td>
+            <td th:text="${task.taskStatus.name}"></td>
             <td th:text="${task.priority}"></td>
-
-            <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
                 <td>
                     <form th:action="@{|/project/${project}/task/${task.id}|}" method="get">
                         <div class="col-12">
@@ -43,10 +41,8 @@
                         </div>
                     </form>
                 </td>
-            </div>
         </tr>
     </table>
-    <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
         <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
             <form th:action="@{|/project/${project}/task|}" method="get">
                 <div class="col-12">
@@ -70,8 +66,6 @@
                 </div>
             </form>
         </div>
-    </div>
-
 </div>
 
 

@@ -14,12 +14,6 @@
                   th:object="${updateTask}">
                 <p class="text-center" th:text="|Task ID: ${task.id}|"></p>
                 <p class="text-center" th:text="|Create Time: ${task.dateStart}|"></p>
-<!--                <p class="text-center" th:text="|Status: ${task.taskStatus}|"></p>-->
-                <!--                <div th:if="${project.get().projectStatus.COMPLETED}">-->
-                <!--        <p class="text-center" th:text="${task.get().dateEnd}"></p>-->
-                <!--                </div>-->
-
-                <!--        <input type="hidden" name="id" th:value="${project.get().id}">-->
                 <div class="mb-3">
                     <label for="task-title-label" class="form-label">Title</label>
                     <input type="text" class="form-control" id="task-title-label" name="title"
@@ -29,7 +23,7 @@
                     <label for="task-priority-label" class="form-label">Priority</label>
                     <select id="task-priority-label" class="form-select" name="priority">
                         <a th:each="pr: ${priority}">
-                            <option th:text="${pr}" th:value="${pr}"></option>
+                            <option th:text="${pr.getIteam()}" th:value="${pr}"></option>
                         </a>
                     </select>
                 </div>
