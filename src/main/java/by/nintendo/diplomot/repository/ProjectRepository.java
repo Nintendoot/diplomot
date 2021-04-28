@@ -1,7 +1,6 @@
 package by.nintendo.diplomot.repository;
 
 import by.nintendo.diplomot.entity.Project;
-import by.nintendo.diplomot.entity.Task;
 import by.nintendo.diplomot.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -16,4 +15,5 @@ public interface ProjectRepository extends JpaRepository<Project,Long> {
     Optional<Project> findByIdAndUsersContaining(long projectId, User user);
     boolean existsByOwnerAndTitle(User user,String title);
     Optional<Project> findByIdAndOwner(long id,User user);
+    List<Project> findAllByUsersContaining(User user);
 }

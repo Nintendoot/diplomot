@@ -3,20 +3,14 @@ package by.nintendo.diplomot.controller;
 import by.nintendo.diplomot.exception.*;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.HandlerExceptionResolver;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 
 @Slf4j
 @ControllerAdvice
-public class ExceptionController  {
+public class ExceptionController {
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public String userAlreadyExists(RuntimeException ex, Model model) {
@@ -63,6 +57,20 @@ public class ExceptionController  {
     @ExceptionHandler(TitleAlreadyExistsException.class)
     public String titleAlreadyExists(RuntimeException ex, Model model) {
         log.error("TitleAlreadyExistsException " + ex.getMessage());
+        model.addAttribute("error", ex.getMessage());
+        return "errorPage";
+    }
+
+    @ExceptionHandler(AuthenticationExeption.class)
+    public String authenticationExeption(RuntimeException ex, Model model) {
+        log.error("AuthenticationExeption " + ex.getMessage());
+        model.addAttribute("error", ex.getMessage());
+        return "errorPage";
+    }
+
+    @ExceptionHandler(CommentNotFoundException.class)
+    public String commentNotFound(RuntimeException ex, Model model) {
+        log.error("CommentNotFoundException " + ex.getMessage());
         model.addAttribute("error", ex.getMessage());
         return "errorPage";
     }

@@ -1,11 +1,9 @@
 package by.nintendo.diplomot.controller;
 
-import by.nintendo.diplomot.entity.Role;
 import by.nintendo.diplomot.entity.User;
 import by.nintendo.diplomot.service.SessionService;
 import by.nintendo.diplomot.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -19,16 +17,21 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Controller
 @RequestMapping(path = "/")
 public class RegistrationController {
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private SessionService sessionService;
+    private final UserService userService;
+    private final SessionService sessionService;
+
+    public RegistrationController(UserService userService, SessionService sessionService) {
+        this.userService = userService;
+        this.sessionService = sessionService;
+    }
 
     @GetMapping(path = "/reg")
     public ModelAndView registView(ModelAndView modelAndView) {
+        log.info("GET request /reg");
         modelAndView.addObject("newUser", new User());
         modelAndView.setViewName("registration");
         return modelAndView;
@@ -36,12 +39,14 @@ public class RegistrationController {
 
     @PostMapping(path = "/reg")
     public ModelAndView regist(@Valid @ModelAttribute("newUser") User user, BindingResult result, ModelAndView modelAndView) {
+        log.info("POST request /reg");
         if (result.hasErrors()) {
             Map<String, String> errorMap = new HashMap<>();
             for (FieldError fieldError : result.getFieldErrors()) {
                 errorMap.put(fieldError.getField(), fieldError.getDefaultMessage());
             }
             modelAndView.setViewName("registration");
+            log.info("POST request /reg : Error.");
         } else {
             userService.saveUser(user);
             modelAndView.setViewName("index");
@@ -51,8 +56,23 @@ public class RegistrationController {
 
     @GetMapping(path = "/auth")
     public ModelAndView authenticate(ModelAndView modelAndView) {
+        log.info("GET request /auth");
         modelAndView.addObject("userSession", new User());
         modelAndView.setViewName("authorization");
+        return modelAndView;
+    }
+
+    @PostMapping(path = "/auth")
+    public ModelAndView auth(ModelAndView modelAndView) {
+        log.info("POST request /auth");
+        User user = sessionService.getSession();
+        if (user != null) {
+            modelAndView.addObject("user", user);
+            modelAndView.setViewName("redirect:/home");
+        } else {
+            modelAndView.addObject("auth", "User not found");
+            modelAndView.setViewName("authorization");
+        }
         return modelAndView;
     }
 }

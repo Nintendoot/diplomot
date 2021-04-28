@@ -10,7 +10,6 @@
 <header th:insert="_head.html"></header>
 <div class="container" style="max-width: 800px;width: 1000px;margin-top: 50px">
     <h5>All Users</h5>
-
     <table class="table table-hover">
         <thead>
         <tr>
@@ -31,7 +30,6 @@
             <td th:text="${us.role}"></td>
             <td th:text="${us.phone}"></td>
             <td th:text="${us.email}"></td>
-
             <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group"
                  sec:authorize="hasRole('Admin')">
                 <td>
@@ -51,6 +49,11 @@
             </div>
         </tr>
     </table>
+    <form th:action="@{/home}" method="get">
+        <div class="col-12">
+            <button type="submit" class="btn btn-secondary btn-sm">Home</button>
+        </div>
+    </form>
 </div>
 
 </div>

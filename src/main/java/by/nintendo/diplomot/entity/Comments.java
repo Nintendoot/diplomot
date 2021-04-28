@@ -1,12 +1,13 @@
 package by.nintendo.diplomot.entity;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
@@ -18,19 +19,20 @@ public class Comments {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comments_id")
     private long id;
-//
-//    @Column(name = "text")
-//    private String text;
-//
-//    @Column(name = "created_at")
-//    private String createdAt;
-//
-//    @ManyToOne
+    @NotBlank
+    @Column(name = "text")
+    private String text;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "task_id")
 //    private Task task;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "task_id")
+    private Task task;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User author;
 
 }

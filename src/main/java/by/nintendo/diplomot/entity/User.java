@@ -11,6 +11,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Data
@@ -50,8 +51,6 @@ public class User {
     @Column(name = "login")
     private String login;
 
-    @NotBlank
-    @Size(min = 4)
     @Column(name = "password")
     private String password;
 
@@ -66,11 +65,14 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "project_id"))
     private List<Project> projects;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name="users_task",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "task_id"))
     private List<Task> tasks;
+
+    @OneToMany(mappedBy = "author")
+    private List<Comments> comments;
 
     @Override
     public String toString() {
@@ -79,6 +81,8 @@ public class User {
                 ", surname='" + surname + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
+                ", login='" + login + '\'' +
                 '}';
     }
+
 }

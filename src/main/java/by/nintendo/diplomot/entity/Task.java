@@ -1,6 +1,12 @@
 package by.nintendo.diplomot.entity;
 
-import lombok.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -15,8 +21,7 @@ import java.util.Set;
 @ToString(exclude = {"project"})
 @Entity
 @Table(name = "task")
-public class
-Task {
+public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "task_id")
@@ -39,18 +44,32 @@ Task {
     @Enumerated(value = EnumType.STRING)
     private TaskStatus taskStatus;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;
 
     @Enumerated(value = EnumType.STRING)
     private Priority priority;
+    //    @LazyCollection(LazyCollectionOption.FALSE)
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
     @JoinTable(name="users_task",
             joinColumns = @JoinColumn(name = "task_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User> usersTask;
+    private List<User> usersTask;
 
+    @OneToMany(cascade = CascadeType.REMOVE,mappedBy = "task")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Comments> comments;
 
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", project=" + project +
+                '}';
+    }
 }

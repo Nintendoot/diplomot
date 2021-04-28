@@ -1,36 +1,34 @@
 package by.nintendo.diplomot.service;
 
-import by.nintendo.diplomot.entity.Project;
 import by.nintendo.diplomot.entity.Role;
 import by.nintendo.diplomot.entity.User;
 import by.nintendo.diplomot.exception.UserAlreadyExistsException;
 import by.nintendo.diplomot.exception.UserWasNotFoundException;
-import by.nintendo.diplomot.repository.ProjectRepository;
 import by.nintendo.diplomot.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+
 @Slf4j
 @Service
 public class UserService {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private SessionService sessionService;
-    @Autowired
-    private ProjectRepository projectRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public void saveUser(User user) {
         log.info("Call method: saveUser(user: " + user + ")");
         if (userRepository.findUserByLogin(user.getLogin()) != null) {
             throw new UserAlreadyExistsException("User already exists exception!!");
         } else {
-            log.info("User "+ user.getLogin()+" save.");
+            log.info("User " + user.getLogin() + " save.");
             user.setRole(Role.USER);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(user);
@@ -46,7 +44,7 @@ public class UserService {
         log.info("Call method: deleteUser(id: " + id + ")");
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
-            userRepository.delete(user.get());
+            userRepository.deleteById(id);
         } else {
             throw new UserWasNotFoundException("User not found.");
         }
@@ -59,15 +57,15 @@ public class UserService {
 
     public void updateUser(User user) {
         log.info("Call method: updateUser(user: " + user + ")");
-        if(userRepository.existsById(user.getId())){
+        if (userRepository.existsById(user.getId())) {
             userRepository.save(user);
-        }else {
+        } else {
             throw new UserWasNotFoundException("User not found.");
         }
     }
 
     public User fundByLogin(String login) {
-        log.info("Call method: fundByLogin(login: " +login + ")");
+        log.info("Call method: fundByLogin(login: " + login + ")");
         boolean b = userRepository.findAll().stream()
                 .anyMatch(x -> x.getLogin().equals(login));
         if (b) {
@@ -75,12 +73,6 @@ public class UserService {
         } else {
             throw new UserWasNotFoundException("User not found.");
         }
-    }
-
-    public void addUserInProject(long id, String login){
-        User userByLogin = userRepository.findUserByLogin(login);
-       projectRepository.getOne(id).getUsers().add(userByLogin);
-       // projectRepository.save()
     }
 
 }

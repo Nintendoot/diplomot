@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-
+//@ToString(exclude = {"tasks"})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -49,14 +49,14 @@ public class Project {
     @Enumerated(value = EnumType.STRING)
     private ProjectStatus projectStatus;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
     @JoinTable(name="project_users",
             joinColumns = @JoinColumn(name = "project_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> users;
-
-    @OneToMany(mappedBy = "project",cascade = CascadeType.ALL)
+//    @OneToMany(mappedBy = "project",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "project",fetch = FetchType.EAGER)
     private List<Task> tasks;
-
 
 }

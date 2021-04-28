@@ -6,34 +6,32 @@ import by.nintendo.diplomot.exception.ProjectNotFountException;
 import by.nintendo.diplomot.exception.TitleAlreadyExistsException;
 import by.nintendo.diplomot.exception.UserWasNotFoundException;
 import by.nintendo.diplomot.repository.ProjectRepository;
-import by.nintendo.diplomot.repository.TaskRepository;
 import by.nintendo.diplomot.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class ProjectService {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private ProjectRepository projectRepository;
-    @Autowired
-    private SessionService sessionService;
-    @Autowired
-    private DateService dateService;
-    @Autowired
-    private TaskRepository taskRepository;
+    private final UserRepository userRepository;
+    private final ProjectRepository projectRepository;
+    private final SessionService sessionService;
+    private final DateService dateService;
+
+    public ProjectService(UserRepository userRepository, ProjectRepository projectRepository, SessionService sessionService, DateService dateService) {
+        this.userRepository = userRepository;
+        this.projectRepository = projectRepository;
+        this.sessionService = sessionService;
+        this.dateService = dateService;
+    }
 
     public void createProject(Project project) {
         log.info("Call method: createProject(project: " + project + ") ");
         User creatorProject = sessionService.getSession();
-        if (creatorProject.getRole().equals(Role.USER)) {
+        if (creatorProject.getRole().equals(Role.MANAGER)) {
             if (!projectRepository.existsByOwnerAndTitle(project.getOwner(), project.getTitle())) {
                 project.setCreatTime(dateService.Time());
                 project.setProjectStatus(ProjectStatus.NOT_STARTED);
@@ -49,27 +47,38 @@ public class ProjectService {
 
     }
 
-    public List<Project> allProjectsByManager(boolean i) {
-        log.info("Call method: allProjectsByManager()");
-        if(i){
-            List<Project>  projects=projectRepository.findAllByOwner(sessionService.getSession());
-            return projects.stream().
-                    filter(x -> !x.getProjectStatus().equals(ProjectStatus.COMPLETED)).
-                    collect(Collectors.toList());
-        }else{
-            List<Project>  projects=projectRepository.findAllByOwner(sessionService.getSession());
-            return projects.stream().
-                    filter(x -> x.getProjectStatus().equals(ProjectStatus.COMPLETED)).
-                    collect(Collectors.toList());
+    public Map<ProjectStatus, List<Project>> allProject() {
+        log.info("Call method: allProject()");
+        User user = sessionService.getSession();
+        Map<ProjectStatus, List<Project>> projectMap = new HashMap<>();
+        List<Project> list = new ArrayList<>();
+        switch (user.getRole()) {
+            case MANAGER:
+                list.addAll(projectRepository.findAllByOwner(user));
+
+                break;
+            case USER:
+                list.addAll(projectRepository.findAllByUsersContaining(user));
+                break;
+            case ADMIN:
+                list.addAll(projectRepository.findAll());
+                break;
         }
+        for (ProjectStatus projectStatus : ProjectStatus.values()) {
+            List<Project> collect = list.stream().
+                    filter(x -> x.getProjectStatus().equals(projectStatus)).
+                    collect(Collectors.toList());
+            projectMap.put(projectStatus, collect);
+        }
+        return projectMap;
+
     }
 
     public Optional<Project> projectById(long id) {
         log.info("Call method: projectById(long: " + id + ") ");
         if (projectRepository.existsById(id)) {
             log.info("Find project byId: " + id);
-            Optional<Project> byId = projectRepository.findById(id);
-            return byId;
+            return projectRepository.findById(id);
         } else {
             throw new ProjectNotFountException("Project not found.");
         }
@@ -95,7 +104,7 @@ public class ProjectService {
             projectById.get().setProjectStatus(project.getProjectStatus());
             projectById.get().setShortName(project.getShortName());
             projectById.get().setDescription(project.getDescription());
-            if(project.getProjectStatus().equals(ProjectStatus.COMPLETED)){
+            if (project.getProjectStatus().equals(ProjectStatus.COMPLETED)) {
                 projectById.get().setEndTime(dateService.Time());
             }
             projectRepository.save(projectById.get());
@@ -122,10 +131,6 @@ public class ProjectService {
         }
     }
 
-    public List<Project> allProjects() {
-        log.info("Call method:allProjects()");
-        return projectRepository.findAll();
-    }
 
     public void deleteUserByProject(long id, String login) {
         log.info("Call method:deleteUserByProject(long: " + id + "String " + login + ") ");
@@ -145,9 +150,9 @@ public class ProjectService {
 
     }
 
-    public Optional<Project> findProjectById(long id) {
-        log.info("Call method:findProjectById(long: " + id + ") ");
-        return projectRepository.findById(id);
+    public List<Project> allProjectByUser() {
+        log.info("Call method:allProjectByUser()");
+        return projectRepository.findAllByUsersContaining(sessionService.getSession());
     }
 
 }

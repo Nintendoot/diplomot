@@ -1,16 +1,10 @@
 package by.nintendo.diplomot.controller;
 
-import by.nintendo.diplomot.entity.Project;
-import by.nintendo.diplomot.entity.ProjectStatus;
-import by.nintendo.diplomot.entity.Task;
-import by.nintendo.diplomot.entity.User;
-import by.nintendo.diplomot.repository.TaskRepository;
+import by.nintendo.diplomot.entity.*;
 import by.nintendo.diplomot.service.ProjectService;
 import by.nintendo.diplomot.service.SessionService;
 import by.nintendo.diplomot.service.TaskService;
-import by.nintendo.diplomot.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -18,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -27,14 +20,15 @@ import java.util.Optional;
 @Controller
 @RequestMapping(path = "/project")
 public class ProjectController {
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private ProjectService projectService;
-    @Autowired
-    private TaskRepository taskRepository;
-    @Autowired
-    private SessionService sessionService;
+    private final ProjectService projectService;
+    private final TaskService taskService;
+    private final SessionService sessionService;
+
+    public ProjectController(ProjectService projectService, TaskService taskService, SessionService sessionService) {
+        this.projectService = projectService;
+        this.taskService = taskService;
+        this.sessionService = sessionService;
+    }
 
     @GetMapping
     public ModelAndView createProjectView(ModelAndView modelAndView) {
@@ -65,9 +59,9 @@ public class ProjectController {
     @GetMapping(path = "/all")
     public ModelAndView allProject(ModelAndView modelAndView) {
         log.info("GET request /project/all");
-        modelAndView.addObject("allProjects", projectService.allProjectsByManager(true));
-        modelAndView.addObject("complitedProject", projectService.allProjectsByManager(false));
-        modelAndView.addObject("all", projectService.allProjects());
+        modelAndView.addObject("allProjects", projectService.allProject());
+        modelAndView.addObject("complitedProject", projectService.allProject().get(ProjectStatus.COMPLETED));
+        modelAndView.addObject("allUsersProject", projectService.allProjectByUser());
         modelAndView.setViewName("project/allProject");
         return modelAndView;
     }
@@ -132,8 +126,23 @@ public class ProjectController {
     public ModelAndView allTasks(@PathVariable("id") long id, ModelAndView modelAndView) {
         log.info("GET request /project/" + id + "/allTask/");
         modelAndView.addObject("project", id);
-        modelAndView.addObject("allTask", taskRepository.findAllByProjectId(id));
+        modelAndView.addObject("allTask", taskService.allTask(id));
+        modelAndView.addObject("comleteProject", taskService.allTask(id).get(TaskStatus.COMPLETED));
         modelAndView.setViewName("task/allTask");
+        return modelAndView;
+    }
+
+    @GetMapping(path = "/{idProject}/user")
+    public ModelAndView warkProjectView(
+            @PathVariable("idProject") long idProject, ModelAndView modelAndView) {
+        log.info("GET request /project/" + idProject + "/user");
+        modelAndView.addObject("notStarted", taskService.allUserTasks(idProject).get(TaskStatus.NOT_STARTED));
+        modelAndView.addObject("inProgress", taskService.allUserTasks(idProject).get(TaskStatus.IN_PROGRESS));
+        modelAndView.addObject("checking", taskService.allUserTasks(idProject).get(TaskStatus.CHECKING));
+        modelAndView.addObject("completed", taskService.allUserTasks(idProject).get(TaskStatus.COMPLETED));
+        modelAndView.addObject("postponed", taskService.allUserTasks(idProject).get(TaskStatus.POSTPONED));
+        modelAndView.addObject("taskStatus", TaskStatus.values());
+        modelAndView.setViewName("work-project");
         return modelAndView;
     }
 }
